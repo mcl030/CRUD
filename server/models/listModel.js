@@ -11,16 +11,16 @@ const pool = new Pool({
 
 
 
-module.exports = {
-  query: (text, params) =>{
-    console.log('this was queried with', text, 'and the params', params) 
-    return pool.query(text, params)
-  },
-}
+// module.exports = {
+//   query: (text, params) =>{
+//     console.log('this was queried with', text, 'and the params', params) 
+//     return pool.query(text, params)
+//   },
+// }
 
 
 // module.exports = pool.query
-// module.exports = pool;
+//module.exports = pool;
 
 // pool.query("SELECT * FROM blah").then
 
