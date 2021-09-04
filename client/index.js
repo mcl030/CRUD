@@ -1,53 +1,53 @@
 class Todo {
     constructor(todo) {
+        // Create div element for each todo list
         this.state = document.createElement('div')
         this.state.innerText = todo.name;
-        this.state.className ='todo'
+        this.state.className ='todoList';
         this.state.style.fontWeight = '800';
-        this.id = todo._id
+        this.id = todo._id;
+
+        // Create div element to hold all tasks in todo list
         this.state.appendTaskDiv = document.createElement('div')
         this.state.appendTaskDiv.setAttribute('id', this.id )
         
+        // Create button and input field for todo list to add task
         const button = document.createElement('button');
         button.innerText = 'Add task';
         const input = document.createElement('input');
-        input.placeholder = 'andy sux';
+        input.placeholder = 'Enter task details...';
         button.addEventListener('click', () => {
             this.addTask(input.value);
         })
         
-        
+        // Grab tasks from db for current todo
         this.getTasks()
+        // Append task input, task button, and task div to todo list
         this.state.appendChild(input);
         this.state.appendChild(button);
-        this.state.appendChild(this.state.appendTaskDiv)
-        this.display()
+        this.state.appendChild(this.state.appendTaskDiv);
 
-    
+        // Append todo list to root
+        this.display();
     }
 
     display() {
         const root = document.querySelector('.root')
-        console.log('herehere')
         root.appendChild(this.state);
     }
 
     getTasks() {
-        console.log('Made it to get tasks')
         fetch(`getTasks/${this.id}`)
             .then(data => data.json())
             .then(res => {
                 for(let i = 0; i < res.length; i++) {
                     const task = new Task(res[i].name, res[i]._id);
-                    console.log('line 31',task)
                     this.state.appendTaskDiv.appendChild(task.state)
                     task.state.style.fontWeight = '200';
-                    console.log('line33')
                 }
             })
             .catch(err => console.log('Error in getTasks', err))
     }
-
 
     addTask(task) {
         fetch('addTask', {
@@ -60,8 +60,8 @@ class Todo {
                 parent: this.id
             })
         })
-            .then( data => data.json())
-            .then( data => {
+            .then(data => data.json())
+            .then(data => {
                 const newTask = new Task(task, data._id);
                 this.state.appendTaskDiv.appendChild(newTask.state)
                 newTask.state.style.fontWeight = '200';
@@ -89,10 +89,6 @@ class Task {
 
     }
     
-
-    // display() {
-        
-    // }
     toggleStatus(){
         fetch('toggleTask', {
             method: 'PUT',
@@ -105,7 +101,7 @@ class Task {
             })
         })
             .then( data => {
-                this.status = !this.status
+                this.status = !this.status;
             })
         
     }
