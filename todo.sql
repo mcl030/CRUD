@@ -12,4 +12,4 @@ CREATE TABLE task (
   parent bigint NOT NULL
 );
 
-ALTER TABLE task ADD CONSTRAINT "parent_fk" FOREIGN KEY ("parent") REFERENCES todo("_id");
+ALTER TABLE task ADD CONSTRAINT "parent_fk" FOREIGN KEY ("parent") REFERENCES todo("_id") ON DELETE CASCADE;

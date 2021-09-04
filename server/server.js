@@ -15,10 +15,13 @@ app.use(express.static('client'));
 
 // GET routes for tasks and todos
 app.get('/getTasks/:parent', (req, res) => {
+  console.log('getting TASKS')
+  console.log(req.params.parent)
   const parent = req.params.parent; // parent id
   const query = `SELECT * FROM task WHERE parent = ${parent}`
   db.query(query)
     .then(data => {
+      console.log('TASKS ARE: ', data.rows)
       res.locals = data.rows;
       res.send(JSON.stringify(res.locals));
     })
@@ -43,6 +46,7 @@ app.get('/getTodos', (req, res) => {
 app.post('/addTask', (req, res) => {
   const task = req.body.task; // task name
   const parent = req.body.parent; // parent id
+  console.log(task, parent)
   const params = [task, false, parent];
   query = `INSERT INTO task(name, status, parent)
     VALUES($1, $2, $3) RETURNING _id`;
@@ -84,7 +88,26 @@ app.put('/toggleTask', (req, res) => {
       res.set(200);
       res.end();
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      res.send(err);
+    })
+})
+
+// DELETE route to delete todo list
+app.delete('/deleteTodo', (req, res) => {
+  const id = req.body.id;
+  const query = `DELETE
+    FROM todo
+    WHERE todo._id = ${id}`
+  db.query(query)
+    .then(data => {
+      res.set(200);
+      res.end();
+    })
+    .catch(err => {
+      console.log('err in deleteTodo:',err)
+      res.send(err);
+    })
 })
 
 // Configure server to listen to PORT 3000
